@@ -1,0 +1,1 @@
+const solution = (str) => str ? str.match(/.{1,2}/g).map(c => c.padEnd(2, '_')) : []
