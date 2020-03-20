@@ -10,5 +10,3 @@ const partsSums = (ls) => {
 
     return sums.reverse();
 }
-
-
