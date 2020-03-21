@@ -5,7 +5,6 @@ const parser = (inst, pos) => {
     let numbers = [];
 
     for (let i = pos; i <= inst.length; i++) {
-        const el = inst[i]
         if (!isNaN(inst[i])) {
             numbers.push(inst[i]);
             continue;
@@ -25,13 +24,13 @@ const parser = (inst, pos) => {
         }
 
         if (inst[i] === ')') {
-            return [buffer.join(""), i]
+            return [buffer.join(""), i];
         }
 
         if (inst[i] === ('(')) {
             const [parsed, _i] = parser(inst, i + 1);
             i = _i;
-            buffer.push(parsed)
+            buffer.push(parsed);
         }
     }
 
@@ -41,11 +40,11 @@ const parser = (inst, pos) => {
 
 // from RS2 kata
 function direction() {
-    const dirs = ["l", "u", "r", "d"]
+    const dirs = ["l", "u", "r", "d"];
     let cur = 2;
 
     const left = () => {
-        cur = !cur ? 3 : cur - 1
+        cur = !cur ? 3 : cur - 1;
         return dirs[cur];
     }
 
@@ -54,7 +53,7 @@ function direction() {
         return dirs[cur];
     }
 
-    return [left, right, dirs[cur]]
+    return [left, right, dirs[cur]];
 }
 
 // from RS2 kata
@@ -64,22 +63,22 @@ const makeGrid = () => {
     ];
 
     const forwLeft = () => {
-        const last = grid[grid.length - 1]
+        const last = grid[grid.length - 1];
         return grid = [...grid, { x: last.x - 1, y: last.y }];
     }
 
     const forwRight = () => {
-        const last = grid[grid.length - 1]
+        const last = grid[grid.length - 1];
         return grid = [...grid, { x: last.x + 1, y: last.y }];
     }
 
     const forwUp = () => {
-        const last = grid[grid.length - 1]
+        const last = grid[grid.length - 1];
         return grid = [...grid, { x: last.x, y: last.y + 1 }];
     }
 
     const forwDown = () => {
-        const last = grid[grid.length - 1]
+        const last = grid[grid.length - 1];
         return grid = [...grid, { x: last.x, y: last.y - 1 }];
     }
 
@@ -95,7 +94,7 @@ function execute(code) {
     for (let i = 0; i < code.length; i++) {
 
         if (code[i] === "L") {
-            dir = turnL()
+            dir = turnL();
             continue;
         }
         else if (code[i] === "R") {
@@ -127,29 +126,34 @@ function execute(code) {
     const yHi = grid.reduce((h, i) => i.y > h ? i.y : h, 0);
     const yLo = grid.reduce((l, i) => i.y < l ? i.y : l, 0);
 
-    let rendered = ''
+    let rendered = '';
+
+    grid.sort((a, b) => {
+        return a.y === b.y ? a.x - b.x : b.y - a.y;
+    })
+    
+
+    grid = grid.map((cell) => cell.x + ',' + cell.y);
 
     for (let y = yHi; y >= yLo; y--) {
         let line = "";
         for (let x = xLo; x <= xHi; x++) {
 
-            if (!!grid.find(c => c.x === x && c.y === y))
+            if (grid.includes(x + ',' + y)) {
                 line += '*';
+                grid.shift();
+            }
             else
                 line += ' ';
         }
 
         if (y !== yLo) {
-            line += '\r\n'
+            line += '\r\n';
         }
 
         rendered += line;
 
     }
 
-    //return rendered;
+    return rendered;
 }
-
-console.log(
-    execute("L4R5L1L7L(L7LL(F8LF13RRRF12LF2L)12(F3RF5L)15(F3RF5L)12(F8LF13RRRF12LF2L)14F0L(F10LF3LF4R5)2)6RRF8F4L10")
-)
