@@ -1,3 +1,4 @@
+//https://www.codewars.com/kata/559a28007caad2ac4e000083
 const perimeter = (n) => {
     fibs = [0, 1];
     for (let i = 1; i <= n; i++) fibs.push(
@@ -6,7 +7,3 @@ const perimeter = (n) => {
     
     return 4 * fibs.reduce((a,b) => a + b, 0);
 }
-
-console.log(
-    perimeter(7)
-)
